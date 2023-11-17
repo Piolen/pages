@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Losowanie prezentu</title>
+</head>
+<body>
+
+  <h2>Losowanie prezentu</h2>
+
+  <label for="imie">Twoje imię:</label>
+  <input type="text" id="imie">
+  
+  <button onclick="losujPrezent()">Wylosuj prezent</button>
+  <p id="wynik"></p>
+
+  <script>
+    var imiona = ['Kasia', 'Karol', 'Gosia', 'Ola', 'Piotrek', 'Carlo', 'Karolina', 'Agnieszka', 'Mateusz', 'Wojtek'];
+    var osobaJuzWylosowala = localStorage.getItem('osobaJuzWylosowala') === 'true';
+    var osobaWylosowana;
+
+    function losujPrezent() {
+      // Pobieranie wprowadzonego imienia
+      var twojeImie = document.getElementById('imie').value;
+
+      // Przekształcenie obu imion na małe litery dla jednolitości
+      twojeImie = twojeImie.toLowerCase();
+      imiona = imiona.map(imie => imie.toLowerCase());
+
+      // Sprawdzenie, czy osoba już wcześniej wylosowała prezent
+      if (osobaJuzWylosowala) {
+        // Wyświetlenie wyniku z poprzedniego losowania
+        document.getElementById('wynik').innerHTML = 'Ostatnio wylosowany prezent dla ' + twojeImie + ' to: ' + osobaWylosowana;
+        return;
+      }
+
+      // Sprawdzenie, czy wprowadzone imię istnieje na liście
+      if (!imiona.includes(twojeImie)) {
+        alert('Podane imię nie znajduje się na liście. Wprowadź poprawne imię.');
+        return;
+      }
+
+      // Usunięcie osoby losującej z listy
+      var indexOsobyLosujacej = imiona.indexOf(twojeImie);
+      imiona.splice(indexOsobyLosujacej, 1);
+
+      // Losowanie indeksu
+      var losowyIndex = Math.floor(Math.random() * imiona.length);
+
+      // Wybranie osoby
+      osobaWylosowana = imiona[losowyIndex];
+
+      // Usunięcie wylosowanej osoby z listy
+      imiona.splice(losowyIndex, 1);
+
+      // Wyświetlenie wyniku
+      document.getElementById('wynik').innerHTML = 'Wylosowany prezent dla ' + twojeImie + ' to: ' + osobaWylosowana;
+
+      // Ustawienie flagi, że osoba już wylosowała prezent
+      osobaJuzWylosowala = true;
+      localStorage.setItem('osobaJuzWylosowala', 'true');
+    }
+
+    // Dodanie obsługi zdarzenia zmiany wartości pola imienia
+    document.getElementById('imie').addEventListener('input', function () {
+      // Resetowanie flagi, gdy użytkownik zaczyna wprowadzać nowe imię
+      osobaJuzWylosowala = false;
+      localStorage.removeItem('osobaJuzWylosowala');
+    });
+  </script>
+
+</body>
+</html>
