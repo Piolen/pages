@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Świąteczne losowanie prezentu</title>
+  <style>
+    body {
+      background-color: #f0f0f0; /* Jasny kolor tła */
+      color: #333; /* Czarny kolor tekstu */
+      font-family: 'Pacifico', cursive; /* Ustawienie czcionki Pacifico */
+    }
+
+    h2, label, p {
+      color: #333; /* Czarny kolor dla nagłówków, etykiet i tekstu */
+      text-transform: capitalize; /* Wyświetlanie tekstu z dużej litery */
+    }
+
+    button {
+      background-color: #4CAF50; /* Zielony kolor tła przycisku */
+      color: #fff; /* Biały kolor tekstu na przycisku */
+      padding: 10px; /* Dodatkowy odstęp wewnątrz przycisku */
+      border: none; /* Brak obramowania przycisku */
+      cursor: pointer; /* Zmiana kształtu kursora po najechaniu na przycisk */
+      border-radius: 5px; /* Zakrąglenie narożników przycisku */
+    }
+
+    button:hover {
+      background-color: #45a049; /* Ciemniejszy odcień zielonego koloru na najechaniu myszą */
+    }
+  </style>
+  <!-- Dodanie linku do czcionki Pacifico z Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
+</head>
+<body>
+
+  <h2>Świąteczne losowanie prezentu</h2>
+
+  <form id="formularz">
+    <label for="imie">Twoje imię:</label>
+    <input type="text" id="imie">
+    <button type="button" onclick="losujPrezent()">Wylosuj prezent</button>
+    <p id="wynik"></p>
+  </form>
+
+  <script>
+    var imiona = ['Kasia', 'Karol', 'Gosia', 'Ola', 'Piotrek', 'Carlo', 'Karolina', 'Agnieszka', 'Mateusz', 'Wojtek'];
+    var osobyJuzWylosowane = {};
+
+    function losujPrezent() {
+      // Pobieranie wprowadzonego imienia
+      var twojeImie = document.getElementById('imie').value;
+
+      // Przekształcenie obu imion na małe litery dla jednolitości
+      twojeImie = twojeImie.toLowerCase();
+
+      // Sprawdzenie, czy wprowadzone imię istnieje na liście
+      if (!imiona.map(imie => imie.toLowerCase()).includes(twojeImie)) {
+        alert('Podane imię nie znajduje się na liście. Wprowadź poprawne imię.');
+        return;
+      }
+
+      // Sprawdzenie, czy osoba już wcześniej wylosowała prezent
+      if (osobyJuzWylosowane[twojeImie]) {
+        alert('Już wylosowałeś osobę. Nie możesz losować ponownie.');
+        return;
+      }
+
+      // Losowanie indeksu
+      var losowyIndex = Math.floor(Math.random() * imiona.length);
+
+      // Wybranie osoby
+      var osobaWylosowana = imiona[losowyIndex];
+
+      // Usunięcie wylosowanej osoby z listy
+      imiona.splice(losowyIndex, 1);
+
+      // Dodanie osoby do listy już wylosowanych
+      osobyJuzWylosowane[twojeImie] = true;
+
+      // Wyświetlenie wyniku
+      document.getElementById('wynik').innerHTML = 'Wylosowana osoba dla ' + twojeImie + ' to: ' + osobaWylosowana;
+
+      // Wyczyszczenie pola imienia po losowaniu
+      document.getElementById('imie').value = '';
+    }
+  </script>
+
+</body>
+</html>
